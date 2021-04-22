@@ -200,7 +200,7 @@ Below we can see our modeled decision tree for 3 splits deep. As shown in the ab
 
 Our XG Boosted Decision tree ended up underperforming our 'plain' decision tree with an overall accuracy of .83, but even if not for performance the weights learned from running many weak learning trees is valuable. As such we can see new features among the top 10 are bankcard utilization and installment. Otherwise, it does reflect similarly to our other models with DTI as the **#1** feature followed by interest rate and other balances and limits.
 
-![xg_features](images/XG_features.png)
+![xg_features](images/xg_features.png)
 
 ### Random Forest
 
