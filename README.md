@@ -8,7 +8,7 @@
 
 ## Data
 
-The data used in this analysis is Lending Club accepted loan data from 2007 - 2020Q3. The link to the dataset can be found on Kaggle where it was aggregated and uploaded. Below are some of the feature names and definitions provided in the dataset:
+The data used in this analysis include Lending Club accepted loan data from 2007 - 2020Q3. The link to the dataset can be found on Kaggle where it was aggregated and uploaded. Below are some of the feature names and definitions provided in the dataset:
 
 **Feature Names and Definitions as provided by Lending Club**
 
@@ -52,7 +52,7 @@ Below is also a link to the kaggle page where the dataset is posted.
 
 ## Business Problem
 
-In order to consitently provide investor returns, Lending Club needs to appropriately vet their applicants to ensure that they indeed will pay off their loan in full with interest. To do so, Lending Club has asked us to analyze their prior loans over the period of 2007 - 2020 Q3 to provide them with insights on 1. What features are most important when assesing a potential applicants creditworthiness and 2. provide them with the best classification model that can accurately predict whether or not a potential applicant's loans will be charged off. Doing so, will allow Lending Club to make more sound decisions when offering lines of credit to future applicants.
+In order to consistently provide investor returns, Lending Club needs to appropriately vet their applicants to ensure that they indeed will pay off their loan in full with interest. To do so, Lending Club has asked us to analyze their prior loans over the period of 2007 - 2020 Q3 to provide them with insights on 1. What features are most important when assessing a potential applicants creditworthiness and 2. provide them with the best classification model that can accurately predict whether or not a potential applicant's loans will be charged off. Doing so, will allow Lending Club to make more sound decisions when offering lines of credit to future applicants.
 
 ## Methods
 
@@ -64,11 +64,11 @@ Lastly, we filtered our data by our target variable loan status Fully Paid and C
 
 ### Feature Inspection and EDA
 
-After all was said and done there were 75 features remaining which were both categorical and continuous. Through inspecting our remaining features there were some numerical features that needed some manual attention to be cleaned such as interest rate and balance utilization which had percentages and needed to handled in order to convert them from objects to float/integers. Also, there were two features that were FICO range high and low which we took the average, created a new column, and dropped the original columns.
+After the preliminary cleaning, there were 75 features remaining which were both categorical and continuous. Through inspecting our remaining features there were some numerical features that needed some manual attention to be cleaned such as interest rate and balance utilization which had percentages and needed to dealt with to convert them from objects to float/integers. Also, there were two features that were FICO range high and low which we took the average, created a new column, and dropped the original columns.
 
-There were some categorical features were dropped due to having too many unique values and creating dummy variables for all unique values would have cause overfitting issues with our modeling. Additionally, there we had a feature for State of the loan recepient which we converted to regions as per the Census defined regions as 50 dummy variables was causing issues with our preliminary models as well.
+There were some categorical features were dropped due to having too many unique values and creating dummy variables for all unique values would have cause overfitting issues with our modeling. Additionally, there we had a feature for State of the loan recipient which we converted to regions as per the Census defined regions as 50 dummy variables was causing issues with our preliminary models as well.
 
-To note, for each categorical feature I produced inspected their histograms and barplots with respect to loan status i.e. Fully Paid or Charged Off, to see how the differing groups were influenced by each each status. Each continuous feature I investigated I plotted a histogram, boxplot, and the given feature by issue date to see trends in the underlying features separated by loan status groups as well.
+To note, for each categorical feature I produced inspected their histograms and barplots with respect to loan status i.e. Fully Paid or Charged Off, to see how the differing groups were influenced by each status. Each continuous feature I investigated I plotted a histogram, boxplot, and the given feature by issue date to see trends in the underlying features separated by loan status groups as well.
 
 #### Loan Amount
 
@@ -89,8 +89,8 @@ Sub_Grade: LC assigned loan subgrade
 ![grade](images/grade.png)
 ![sub_grade](images/sub_grade.png)
 
-In the plots above we see firstly, that subgrade further distinguishes each grade into 1-5.
-Across both features, as the grade letter decreases from A-G the rates at which loans are charged off increases so we expect that both of these features will have significant weights in our model's prediction
+In the plots above, we note first that subgrade further distinguishes each grade into 1-5.
+Across both features, as the grade letter decreases from A-G the rates at which loans are charged off increases so we expect that both of these features will have significant weights in our models
 
 Additionally, most loans that were issued are in the A-C range of the grade/sub_grade spectrum
 
@@ -100,7 +100,7 @@ As mentioned previously, the average FICO score takes the average of the upper a
 
 ![FICO](images/fico_score.png)
 
-For FICO scores we can see that the distribution is skewed toward borrower's with lower fico score, specifically below 725.
+For FICO scores we can see that the distribution is skewed toward borrowers with lower fico score, specifically below 725.
 From the boxplot we can see that borrowers that fully paid off their loans had a higher average FICO score.
 This trend holds true overtime as well, and was exacerbated even further when looking at average scores from 2020 and after.
 
@@ -111,7 +111,7 @@ Interest Rate : Interest Rate on the loan
 ![int_rate](images/interest.png)
 
 Preliminarily, we can see that interest rates issued are generally between 10-15%
-Furthermore, the interest rates seem to be quite significant in whether a borrower paid off a loan, unsurpisingly I might add.
+Furthermore, the interest rates seem to be quite significant in whether a borrower paid off a loan, unsurprisingly I might add.
 Overtime the difference in interest for borrower's who fully paid varied from 2-4%. The average interest rate on Fully Paid loans was 12.5% while for Charged Off loans was 15.6% which comes out to about a 20% increase in interest.
 
 #### Term
@@ -156,15 +156,15 @@ Roughly 80% of the loans issued did not have a late fee, but the average number 
 
 ### Tranformation
 
-After the prior steps of preprocessing, Feature Inpsection and EDA, there were three main items that needed to be addressed with transformations. As we discovered in our Feature Inpsection and EDA some of our features had extreme outliers. To address this issue prior to modelling we dropped outliers that were past 4 standard deviations. This also addresses the normality assumptions of our models.
+After the prior steps of preprocessing, Feature Inspection and EDA, there were three main items that needed to be addressed with transformations. As we discovered in our Feature Inspection and EDA some of our features had extreme outliers. To address this issue prior to modelling we dropped outliers that were past 4 standard deviations. This also addresses the normality assumptions of our models.
 
-Secondly, there was quite the class imbalance problem as our target Charged Off loans were only 20% of the overall population. To handle this we used SMOTENC which sythetically oversamples the minorty class to be to balance the the weights of our data to 50/50. The smote adjusted data was only used to train our models while our testing was done on the scaled original data.
+Secondly, there was quite the class imbalance problem as our target Charged Off loans were only 20% of the overall population. To handle this, we used SMOTENC which synthetically oversamples the minority class to be to balance the weights of our data to 50/50. The smote adjusted data was only used to train our models while our testing was done on the scaled original data.
 
 As the root of our predictions were binary classification i.e. will a borrower charge off their loan or not, we used min max scaling on both our training and testing data so as to arrange our data in a way that would perform best during the modeling.
 
 ## Results
 
-In an attempt to find the best performing predicitive model, we ran the following models on our data:
+In an attempt to find the best performing predictive model, we ran the following models on our data:
 
     - Logistic Regression
     - Decision Tree
@@ -180,7 +180,7 @@ Overall our best performing model was a random forest with an accuracy score of 
 
 ### Logistic Regression
 
-By looking at our feature coefficients of our the logistic regression model we see that the top features are loan amount, interest rate, dti, total_rec_late_fee, and the deep sub grade categories. Our model performance was the worst performing of the group, but as a baseline it does highlight some highly influential features
+By looking at our feature coefficients of the logistic regression model we see that the top features are loan amount, interest rate, dti, total_rec_late_fee, and the deep sub grade categories. Our model performance was the worst performing of the group, but as a baseline it does highlight some highly influential features
 
 ![log_summary](images/log_test.png)
 
@@ -198,7 +198,7 @@ Below we can see our modeled decision tree for 3 splits deep. As shown in the ab
 
 ### XG Boosted Decision Tree
 
-Our XG Boosted Decision tree actually ended up underperforming our 'plain' decision tree with an overall accuracy of .83, but even if not for performance the weights learned from running many weak learning trees is valuable. As such we can see new features among the top 10 are bankcard utilization and installment. Otherwise, it does reflect similarly to our other models with DTI as the **#1** feature followed by interest rate and other balances and limits.
+Our XG Boosted Decision tree ended up underperforming our 'plain' decision tree with an overall accuracy of .83, but even if not for performance the weights learned from running many weak learning trees is valuable. As such we can see new features among the top 10 are bankcard utilization and installment. Otherwise, it does reflect similarly to our other models with DTI as the **#1** feature followed by interest rate and other balances and limits.
 
 ![xg_features](images/XG_features.png)
 
@@ -206,7 +206,7 @@ Our XG Boosted Decision tree actually ended up underperforming our 'plain' decis
 
 Our Random forest model surprisingly was our best performing model of the group with an overall accuracy score of .90.
 
-Similarly to our decision tree, our random forest's top feature was number inquiries in the past 6 months, followed by interest rate and term. Other notable, features that were not as influential in our other models are percent of accounts never delinquent and average FICO score, both which are quite intuitive.
+Similar to our decision tree, our random forest's top feature was number inquiries in the past 6 months, followed by interest rate and term. Other notable, features that were not as influential in our other models are percent of accounts never delinquent and average FICO score, both which are quite intuitive.
 
 ![rf_features](images/rf_features.png)
 
@@ -216,7 +216,7 @@ Our neural network model came up 4th among our 5 models in terms of accuracy, bu
 
 ## Conclusion
 
-In conclusion, we would advise Lending Club to use a random forest model to preidct loan losses of potential borrowers and perhaps. Criteria that Lending Club should be most aware in making the decision to extend a line of credit are the following:
+In conclusion, we would advise Lending Club to use a random forest model to predict loan losses of potential borrowers and perhaps. Criteria that Lending Club should be most aware in making the decision to extend a line of credit are the following:
 
  - Interest Rate
  - Debt to Income Ratio
@@ -230,6 +230,12 @@ A combination of predictive modeling and criteria awareness by Lending Club shou
 
 ## Future Work
 
-For future work, it would be relevant to analyze how this model performed throughout COVID as it is a prime example of an unexpected shock that would test any risk model. Additionally, to be able to create an even more complex neural network would likely increase our NN models score, but I digress. Other considerations would be including additional economic indicators or consumer sentiment/outlook numbers as well as, investigate the potential pricing of the underlying loans to the extent that they are sold to investors on the secondary market.
+For future work, it would be relevant to analyze how this model performed throughout COVID as it is a prime example of an unexpected shock that would test any risk model. 
+
+Additionally, to be able to create an even more complex neural network would likely increase our NN models score, but I digress. 
+
+Other considerations would be including additional economic indicators or consumer sentiment/outlook numbers.
+
+Investigate the potential pricing of the underlying loans to the extent that they are sold to investors on the secondary market.
 
 Lastly, it would be interesting to have a model that considers active loans and probability of default for those loans in order to better prepare future windfall to Lending Club and its investors.
